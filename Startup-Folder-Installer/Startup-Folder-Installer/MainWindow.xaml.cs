@@ -90,7 +90,7 @@ namespace Disc_Drive_Installer
                 files.Add("Disc_drive.vbs");
                 try
                 {
-                    ExtractEmbeddedResource("Startup_Folder_Installer", Environment.ExpandEnvironmentVariables(@"%AppData%\Microsoft\Windows\Start Menu\Programs\Startup"), files);
+                    ExtractEmbeddedResource("Startup_Folder_Installer.ExampleFiles", Environment.ExpandEnvironmentVariables(@"%AppData%\Microsoft\Windows\Start Menu\Programs\Startup"), files);
                 }
                 catch (Exception ex)
                 {
