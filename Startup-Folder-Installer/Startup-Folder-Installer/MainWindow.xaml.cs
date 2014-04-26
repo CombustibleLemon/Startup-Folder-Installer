@@ -86,7 +86,7 @@ namespace Disc_Drive_Installer
             {
                 Timer.Stop();
                 SetState(3);
-                List<string> files = new List<string>(1);
+                List<string> files = new List<string>();
                 files.Add("Disc_drive.vbs");
                 try
                 {
@@ -94,7 +94,7 @@ namespace Disc_Drive_Installer
                 }
                 catch (Exception ex)
                 {
-                    TextBlock.FontSize = 16;
+                    TextBlock.FontSize = 14;
                     TextBlock.Text = ex.ToString();
                 }
                 return;
