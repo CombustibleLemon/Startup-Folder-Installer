@@ -1,7 +1,7 @@
 ﻿<Window x:Class="Disc_Drive_Installer.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="Startup Folder Installer" Height="350" Width="525" WindowStartupLocation="CenterScreen" Cursor="ArrowCD" Icon="Autocad-Ws.ico" ResizeMode="CanMinimize" ForceCursor="True">
+        Title="Startup Folder Installer" Height="350" Width="525" WindowStartupLocation="CenterScreen" Cursor="ArrowCD" ResizeMode="CanMinimize" ForceCursor="True">
     <Window.TaskbarItemInfo>
         <TaskbarItemInfo ProgressState="Normal" ProgressValue="0"/>
     </Window.TaskbarItemInfo>
@@ -9,6 +9,5 @@
         <ProgressBar x:Name="ProgressBar" Margin="10,0,10,10" Height="49" VerticalAlignment="Bottom" Visibility="Visible" IsTabStop="False" IsHitTestVisible="False"/>
         <TextBlock x:Name="TextBlock" Margin="10,10,10,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="229" Visibility="Visible" FontSize="12" TextAlignment="Justify"/>
         <Button x:Name="StartButton" Content="Install" HorizontalAlignment="Center" Margin="0" VerticalAlignment="Center" Visibility="Visible" Width="121" Height="50" IsDefault="True" Cursor="Pen" FontSize="22" Click="StartButton_Click"/>
-
     </Grid>
 </Window>
