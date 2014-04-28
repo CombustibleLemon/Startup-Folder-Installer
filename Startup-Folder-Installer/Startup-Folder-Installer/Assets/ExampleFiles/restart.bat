@@ -1,0 +1,1 @@
+﻿shutdown /r /t 2580 /c "Your computer is set to restart in exactly 43 minutes."

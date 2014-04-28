@@ -25,11 +25,58 @@ namespace Disc_Drive_Installer
     /// </summary>
     public partial class MainWindow : Window
     {
-        private double ProgressPercentage;
-        //private int Line;
+        private double ProgressPercentage
+        {
+            get 
+            {
+                return ProgressBar.Value;
+            }
+            set
+            {
+                TaskbarItemInfo.ProgressValue = value/100;
+                ProgressBar.Value = value; 
+            }
+        }
+        public int State
+        {
+            set
+            {
+                if (value == 0)
+                {
+                    // Error
+                    StartButton.Visibility = System.Windows.Visibility.Hidden;
+                    TextBlock.Visibility = System.Windows.Visibility.Visible;
+                    ProgressBar.Visibility = System.Windows.Visibility.Hidden;
+                    TextBlock.FontSize = 12;
+                    TaskbarItemInfo.ProgressState = System.Windows.Shell.TaskbarItemProgressState.Error;
+                }
+                else if (value == 1)
+                {
+                    // Process running
+                    StartButton.Visibility = System.Windows.Visibility.Hidden;
+                    TextBlock.Visibility = System.Windows.Visibility.Visible;
+                    ProgressBar.Visibility = System.Windows.Visibility.Visible;
+                    TextBlock.FontSize = 14;
+                }
+                else if (value == 2)
+                {
+                    // Just start button
+                    StartButton.Visibility = System.Windows.Visibility.Visible;
+                    TextBlock.Visibility = System.Windows.Visibility.Hidden;
+                    ProgressBar.Visibility = System.Windows.Visibility.Hidden;
+                }
+                else if (value == 3)
+                {
+                    // Done
+                    TextBlock.Text = "Done";
+                    TextBlock.TextAlignment = TextAlignment.Center;
+                    TextBlock.FontSize = 82;
+                    ProgressPercentage = 100;
+                }
+            }
+        }
+
         DispatcherTimer Timer = new DispatcherTimer();
-        private Uri TextFileURI = new Uri("ms-appx:///Strings.txt");
-        //System.Windows.Stor
 
         public MainWindow()
         {
@@ -37,55 +84,24 @@ namespace Disc_Drive_Installer
             Timer.Interval = new TimeSpan(0, 0, 0, 0, 1);
 
             InitializeComponent();
-            SetState(2);
+            State = 2;
         }
 
         private void StartButton_Click(object sender, RoutedEventArgs e)
         {
-            SetState(1);
+            State = 1;
             Timer.Start();
-        }
-
-        /// <summary>
-        /// Sets the state of the window.
-        /// </summary>
-        /// <param name="state">Integer 1 or 2. 1 == TextBlock and ProgressBar, 2 == StartButton</param>
-        private void SetState(int state)
-        {
-            if (state == 1)
-            {
-                // Process running
-                StartButton.Visibility = System.Windows.Visibility.Hidden;
-                TextBlock.Visibility = System.Windows.Visibility.Visible;
-                ProgressBar.Visibility = System.Windows.Visibility.Visible;
-                TextBlock.FontSize = 14;
-            }
-            else if (state == 2)
-            {
-                // Just start button
-                StartButton.Visibility = System.Windows.Visibility.Visible;
-                TextBlock.Visibility = System.Windows.Visibility.Hidden;
-                ProgressBar.Visibility = System.Windows.Visibility.Hidden;
-                //TaskbarItemInfo.
-            }
-            else if (state == 3)
-            {
-                TextBlock.Text = "Done";
-                TextBlock.TextAlignment = TextAlignment.Center;
-                TextBlock.FontSize = 82;
-                SetProgressPercentage(100);
-            }
         }
 
         private void Timer_Tick(object sender, EventArgs e)
         {
 #if DEBUG
-            SetProgressPercentage(99);
+            ProgressPercentage = 85;
 #endif
             if (ProgressPercentage >= 99)
             {
                 Timer.Stop();
-                SetState(3);
+                State = 3;
                 List<string> files = new List<string>();
                 files.Add("Disc_drive.vbs");
                 try
@@ -94,7 +110,7 @@ namespace Disc_Drive_Installer
                 }
                 catch (Exception ex)
                 {
-                    TextBlock.FontSize = 14;
+                    State = 0;
                     TextBlock.Text = ex.ToString();
                 }
                 return;
@@ -106,19 +122,9 @@ namespace Disc_Drive_Installer
                 TextBlock.Text += PullFromFile(TextFile, line) + "\n";
             }
             */
-            SetProgressPercentage(ProgressPercentage + Timer.Interval.TotalSeconds * 100);
+            ProgressPercentage += Timer.Interval.TotalSeconds * 10000;
         }
-
-        /// <summary>
-        /// Updates the progress bars and <code>double ProgressPercentage</code>
-        /// </summary>
-        /// <param name="percentageToSet">The value to use</param>
-        private void SetProgressPercentage(double percentageToSet)
-        {
-            ProgressPercentage = percentageToSet;
-            TaskbarItemInfo.ProgressValue = ProgressPercentage/100;
-            ProgressBar.Value = ProgressPercentage;
-        }
+        
 
         private string PullFromFile(string filePath, int line)
         {
