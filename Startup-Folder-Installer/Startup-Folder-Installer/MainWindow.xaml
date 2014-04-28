@@ -1,7 +1,7 @@
 ﻿<Window x:Class="Disc_Drive_Installer.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="Disc Drive Installer" Height="350" Width="525" WindowStartupLocation="CenterScreen" Cursor="ArrowCD" Icon="Autocad-Ws.ico" ResizeMode="CanMinimize" ToolTip="Poop nuggets" ForceCursor="True">
+        Title="Startup Folder Installer" Height="350" Width="525" WindowStartupLocation="CenterScreen" Cursor="ArrowCD" Icon="Autocad-Ws.ico" ResizeMode="CanMinimize" ForceCursor="True">
     <Window.TaskbarItemInfo>
         <TaskbarItemInfo ProgressState="Normal" ProgressValue="0"/>
     </Window.TaskbarItemInfo>
