@@ -50,7 +50,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>Autocad-Ws.ico</ApplicationIcon>
+    <ApplicationIcon>Assets\Autocad-Ws.ico</ApplicationIcon>
   </PropertyGroup>
   <PropertyGroup>
     <TargetZone>LocalIntranet</TargetZone>
@@ -121,7 +121,7 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Autocad-Ws.ico" />
+    <Resource Include="Assets\Autocad-Ws.ico" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Assets\ExampleFiles\Disc_drive.vbs" />

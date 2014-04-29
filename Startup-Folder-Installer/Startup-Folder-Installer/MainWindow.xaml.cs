@@ -115,27 +115,7 @@ namespace Disc_Drive_Installer
                 }
                 return;
             }
-            /*
-            if ((int)ProgressPercentage > line)
-            {
-                line = (int)ProgressPercentage;
-                TextBlock.Text += PullFromFile(TextFile, line) + "\n";
-            }
-            */
             ProgressPercentage += Timer.Interval.TotalSeconds * 10000;
-        }
-        
-
-        private string PullFromFile(string filePath, int line)
-        {
-            StreamReader fileReader = new StreamReader(filePath);
-            
-            for (int i = 0; i < line; i++)
-            {
-                fileReader.ReadLine();
-            }
-
-            return fileReader.ReadLine();
         }
 
         public static void ExtractEmbeddedResource(string resourceLocation, string outputDir, List<string> files)
