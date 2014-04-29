@@ -8,6 +8,12 @@
     <Grid>
         <ProgressBar x:Name="ProgressBar" Margin="10,0,10,10" Height="49" VerticalAlignment="Bottom" Visibility="Visible" IsTabStop="False" IsHitTestVisible="False"/>
         <TextBlock x:Name="TextBlock" Margin="10,10,10,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="229" Visibility="Visible" FontSize="12" TextAlignment="Justify"/>
-        <Button x:Name="StartButton" Content="Install" HorizontalAlignment="Center" Margin="0" VerticalAlignment="Center" Visibility="Visible" Width="121" Height="50" IsDefault="True" Cursor="Pen" FontSize="22" Click="StartButton_Click"/>
+        <Button x:Name="StartButton" Content="Install" HorizontalAlignment="Center" Margin="0,200,0,0" VerticalAlignment="Center" Visibility="Visible" Width="121" Height="50" IsDefault="True" Cursor="Pen" FontSize="22" Click="StartButton_Click"/>
+        <GroupBox x:Name="GroupBox1" Header="GroupBox" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Height="160" Width="189">
+            <Grid x:Name="GroupBox1Grid" Margin="11.5,7"/>
+        </GroupBox>
+        <GroupBox x:Name="GroupBox2" Header="GroupBox" HorizontalAlignment="Right" Margin="0,10,10,0" VerticalAlignment="Top" Height="160" Width="189">
+            <Grid x:Name="GroupBox2Grid" Margin="11.5,7"/>
+        </GroupBox>
     </Grid>
 </Window>

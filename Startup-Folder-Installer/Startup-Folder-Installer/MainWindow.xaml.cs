@@ -15,6 +15,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Windows.Threading;
+using System.Xml;
 
 
 
@@ -25,6 +26,9 @@ namespace Disc_Drive_Installer
     /// </summary>
     public partial class MainWindow : Window
     {
+        private const String FILE_TYPE_1 = "Tool";
+        private const String FILE_TYPE_2 = "Prank";
+        XmlDocument doc = new XmlDocument();
         private double ProgressPercentage
         {
             get 
@@ -44,30 +48,53 @@ namespace Disc_Drive_Installer
                 if (value == 0)
                 {
                     // Error
-                    StartButton.Visibility = System.Windows.Visibility.Hidden;
                     TextBlock.Visibility = System.Windows.Visibility.Visible;
-                    ProgressBar.Visibility = System.Windows.Visibility.Hidden;
+                    ProgressBar.Visibility = System.Windows.Visibility.Visible;
+
+                    StartButton.Visibility = System.Windows.Visibility.Hidden;
+                    GroupBox1.Visibility = System.Windows.Visibility.Hidden;
+                    GroupBox2.Visibility = System.Windows.Visibility.Hidden;
+
                     TextBlock.FontSize = 12;
                     TaskbarItemInfo.ProgressState = System.Windows.Shell.TaskbarItemProgressState.Error;
                 }
                 else if (value == 1)
                 {
                     // Process running
-                    StartButton.Visibility = System.Windows.Visibility.Hidden;
                     TextBlock.Visibility = System.Windows.Visibility.Visible;
                     ProgressBar.Visibility = System.Windows.Visibility.Visible;
+
+                    StartButton.Visibility = System.Windows.Visibility.Hidden;
+                    GroupBox1.Visibility = System.Windows.Visibility.Hidden;
+                    GroupBox2.Visibility = System.Windows.Visibility.Hidden;
+
                     TextBlock.FontSize = 14;
                 }
                 else if (value == 2)
                 {
-                    // Just start button
+                    // Installation choices
                     StartButton.Visibility = System.Windows.Visibility.Visible;
+                    GroupBox1.Visibility = System.Windows.Visibility.Hidden;
+                    GroupBox2.Visibility = System.Windows.Visibility.Hidden;
+
                     TextBlock.Visibility = System.Windows.Visibility.Hidden;
                     ProgressBar.Visibility = System.Windows.Visibility.Hidden;
+
+                    GroupBox1.Header = FILE_TYPE_1;
+                    GroupBox2.Header = FILE_TYPE_2;
+                    
+                    //doc.Load()
                 }
                 else if (value == 3)
                 {
                     // Done
+                    TextBlock.Visibility = System.Windows.Visibility.Visible;
+                    ProgressBar.Visibility = System.Windows.Visibility.Visible;
+
+                    StartButton.Visibility = System.Windows.Visibility.Hidden;
+                    GroupBox1.Visibility = System.Windows.Visibility.Hidden;
+                    GroupBox2.Visibility = System.Windows.Visibility.Hidden;
+
                     TextBlock.Text = "Done";
                     TextBlock.TextAlignment = TextAlignment.Center;
                     TextBlock.FontSize = 82;
@@ -75,7 +102,6 @@ namespace Disc_Drive_Installer
                 }
             }
         }
-
         DispatcherTimer Timer = new DispatcherTimer();
 
         public MainWindow()
