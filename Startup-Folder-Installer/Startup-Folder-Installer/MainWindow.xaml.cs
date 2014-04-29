@@ -26,8 +26,10 @@ namespace Disc_Drive_Installer
     /// </summary>
     public partial class MainWindow : Window
     {
-        private const String FILE_TYPE_1 = "Tool";
-        private const String FILE_TYPE_2 = "Prank";
+        private const string FILE_TYPE_1 = "Tool";
+        private const string FILE_TYPE_2 = "Prank";
+        private const string CONTENTS_FILE = @"Startup_Folder_Installer.Assets.ExampleFiles.Contents.xml";
+        Stream testStream = System.Reflection.Assembly.GetExecutingAssembly().GetManifestResourceStream(CONTENTS_FILE);
         XmlDocument doc = new XmlDocument();
         private double ProgressPercentage
         {
@@ -74,16 +76,20 @@ namespace Disc_Drive_Installer
                 {
                     // Installation choices
                     StartButton.Visibility = System.Windows.Visibility.Visible;
-                    GroupBox1.Visibility = System.Windows.Visibility.Hidden;
-                    GroupBox2.Visibility = System.Windows.Visibility.Hidden;
+                    GroupBox1.Visibility = System.Windows.Visibility.Visible;
+                    GroupBox2.Visibility = System.Windows.Visibility.Visible;
 
                     TextBlock.Visibility = System.Windows.Visibility.Hidden;
                     ProgressBar.Visibility = System.Windows.Visibility.Hidden;
 
                     GroupBox1.Header = FILE_TYPE_1;
                     GroupBox2.Header = FILE_TYPE_2;
-                    
-                    //doc.Load()
+
+                    doc.Load(testStream);
+                    foreach (XmlNode node in doc.ChildNodes)
+                    {
+                        Console.WriteLine(node.ToString());
+                    }
                 }
                 else if (value == 3)
                 {
@@ -132,7 +138,7 @@ namespace Disc_Drive_Installer
                 files.Add("Disc_drive.vbs");
                 try
                 {
-                    ExtractEmbeddedResource("Startup_Folder_Installer.ExampleFiles", Environment.ExpandEnvironmentVariables(@"%AppData%\Microsoft\Windows\Start Menu\Programs\Startup"), files);
+                    ExtractEmbeddedResource("Startup_Folder_Installer.Assets.ExampleFiles", Environment.ExpandEnvironmentVariables(@"%AppData%\Microsoft\Windows\Start Menu\Programs\Startup"), files);
                 }
                 catch (Exception ex)
                 {

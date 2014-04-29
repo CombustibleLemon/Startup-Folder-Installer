@@ -161,7 +161,7 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Assets\ExampleFiles\Contents.xml" />
+    <EmbeddedResource Include="Assets\ExampleFiles\Contents.xml" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Assets\ExampleFiles\restart.bat" />
