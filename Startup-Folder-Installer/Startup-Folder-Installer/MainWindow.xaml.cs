@@ -19,7 +19,7 @@ using System.Xml;
 
 
 
-namespace Disc_Drive_Installer
+namespace Startup_Folder_Installer
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
@@ -29,8 +29,11 @@ namespace Disc_Drive_Installer
         private const string FILE_TYPE_1 = "Tool";
         private const string FILE_TYPE_2 = "Prank";
         private const string CONTENTS_FILE = @"Startup_Folder_Installer.Assets.ExampleFiles.Contents.xml";
+        
+        private List<GroupBox> GroupBoxes = new List<GroupBox>();
         Stream testStream = System.Reflection.Assembly.GetExecutingAssembly().GetManifestResourceStream(CONTENTS_FILE);
         XmlDocument doc = new XmlDocument();
+
         private double ProgressPercentage
         {
             get 
@@ -78,6 +81,8 @@ namespace Disc_Drive_Installer
                     StartButton.Visibility = System.Windows.Visibility.Visible;
                     GroupBox1.Visibility = System.Windows.Visibility.Visible;
                     GroupBox2.Visibility = System.Windows.Visibility.Visible;
+                    GroupBox1Grid.Visibility = System.Windows.Visibility.Visible;
+                    GroupBox2Grid.Visibility = System.Windows.Visibility.Visible;
 
                     TextBlock.Visibility = System.Windows.Visibility.Hidden;
                     ProgressBar.Visibility = System.Windows.Visibility.Hidden;
@@ -86,31 +91,13 @@ namespace Disc_Drive_Installer
                     GroupBox2.Header = FILE_TYPE_2;
 
                     doc.Load(testStream);
-                    foreach (XmlNode node in doc.ChildNodes)
+                    foreach (GroupBox groupBox in groupBoxes)
                     {
-                        foreach (XmlNode nodeChild in node.ChildNodes)
+                        if (nodeChild.Attributes[0].Value == (string)groupBox.Header)
                         {
-                            if (nodeChild.Name == "file")
-                            {
-                                CheckBox newBox = new CheckBox();
-                                for (int i = 0; i < nodeChild.ChildNodes.Count; i++)
-                                {
-                                    if (nodeChild.ChildNodes.Item(i).Name == "name")
-                                    {
-                                        newBox.Content = nodeChild.ChildNodes.Item(i).InnerText;
-                                    }
-                                }
-
-                                if (nodeChild.Attributes[0].Value == "tool")
-                                {
-                                    GroupBox1Grid.Children.Add(newBox);
-                                }
-                                else
-                                {
-                                    GroupBox2Grid.Children.Add(newBox);
-                                }
-                                newBox.ToolTip = newBox.Content;
-                            }
+                            Grid grid = new Grid();
+                            grid = (Grid)groupBox.Content;
+                            grid.Children.Add(newBox);
                         }
                     }
                 }
@@ -140,6 +127,9 @@ namespace Disc_Drive_Installer
 
             InitializeComponent();
             State = 2;
+
+            GroupBoxes.Add(GroupBox1);
+            GroupBoxes.Add(GroupBox2);
         }
 
         private void StartButton_Click(object sender, RoutedEventArgs e)
