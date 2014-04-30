@@ -88,7 +88,30 @@ namespace Disc_Drive_Installer
                     doc.Load(testStream);
                     foreach (XmlNode node in doc.ChildNodes)
                     {
-                        Console.WriteLine(node.ToString());
+                        foreach (XmlNode nodeChild in node.ChildNodes)
+                        {
+                            if (nodeChild.Name == "file")
+                            {
+                                CheckBox newBox = new CheckBox();
+                                for (int i = 0; i < nodeChild.ChildNodes.Count; i++)
+                                {
+                                    if (nodeChild.ChildNodes.Item(i).Name == "name")
+                                    {
+                                        newBox.Content = nodeChild.ChildNodes;
+                                    }
+                                }
+
+                                if (nodeChild.Attributes[0].Value == "tool")
+                                {
+                                    GroupBox1Grid.Children.Add(newBox);
+                                }
+                                else
+                                {
+                                    GroupBox2Grid.Children.Add(newBox);
+                                }
+                                newBox.ToolTip = newBox.Content;
+                            }
+                        }
                     }
                 }
                 else if (value == 3)
