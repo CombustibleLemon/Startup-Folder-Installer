@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
-<ExampleFiles>
+<files>
   <file type="prank" format="text/vbs">
     <name>Disc drive opener/closer</name>
     <filename>Disc_drive.vbs</filename>
@@ -8,4 +8,4 @@
     <name>43-minute logoff</name>
     <filename>restart.bat</filename>
   </file>
-</ExampleFiles>
+</files>

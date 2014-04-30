@@ -28,6 +28,7 @@ namespace Startup_Folder_Installer
     {
         private const string CONTENTS_FILE = @"Startup_Folder_Installer.Assets.ExampleFiles.Contents.xml";
 
+        private List<string> xmlPath = new List<string>() { "files", "file" };
         private List<CheckBox> checkBoxes = new List<CheckBox>();
         private List<GroupBox> groupBoxes = new List<GroupBox>();
         Stream contentsFileStream = System.Reflection.Assembly.GetExecutingAssembly().GetManifestResourceStream(CONTENTS_FILE);
@@ -142,7 +143,7 @@ namespace Startup_Folder_Installer
                 files.Add("Disc_drive.vbs");
                 try
                 {
-                    ExtractEmbeddedResource("Startup_Folder_Installer.Assets.ExampleFiles", Environment.ExpandEnvironmentVariables(@"%AppData%\Microsoft\Windows\Start Menu\Programs\Startup"), files);
+                    Helpers.ExtractEmbeddedResource("Startup_Folder_Installer.Assets.ExampleFiles", Environment.ExpandEnvironmentVariables(@"%AppData%\Microsoft\Windows\Start Menu\Programs\Startup"), files);
                 }
                 catch (Exception ex)
                 {
@@ -154,28 +155,10 @@ namespace Startup_Folder_Installer
             ProgressPercentage += Timer.Interval.TotalSeconds * 10000;
         }
 
-        public static void ExtractEmbeddedResource(string resourceLocation, string outputDir, List<string> files)
-        {
-            foreach (string file in files)
-            {
-                using (System.IO.Stream stream = System.Reflection.Assembly.GetExecutingAssembly().GetManifestResourceStream(resourceLocation + @"." + file))
-                {
-                    using (System.IO.FileStream fileStream = new System.IO.FileStream(System.IO.Path.Combine(outputDir, file), System.IO.FileMode.Create))
-                    {
-                        for (int i = 0; i < stream.Length; i++)
-                        {
-                            fileStream.WriteByte((byte)stream.ReadByte());
-                        }
-                        fileStream.Close();
-                    }
-                }
-            }
-        }
-
         private void XMLtoCheckboxes()
         {
             // Create checkboxes based on CONTENTS_FILE and insert them into the correct GroupBoxes
-            checkBoxes = Helpers.DanXML.XML_to_CheckBox(doc.ChildNodes, "file", "name", "type");
+            checkBoxes = Helpers.XML_to_CheckBox(doc, xmlPath, "name", "type");
             foreach (CheckBox box in checkBoxes)
             {
                 // box.ToolTip should contain the value of XML attribute "type"
