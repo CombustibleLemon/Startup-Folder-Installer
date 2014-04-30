@@ -30,7 +30,7 @@ namespace Startup_Folder_Installer
         private const string FILE_TYPE_2 = "Prank";
         private const string CONTENTS_FILE = @"Startup_Folder_Installer.Assets.ExampleFiles.Contents.xml";
         
-        private List<GroupBox> GroupBoxes = new List<GroupBox>();
+        private List<GroupBox> groupBoxes = new List<GroupBox>();
         Stream testStream = System.Reflection.Assembly.GetExecutingAssembly().GetManifestResourceStream(CONTENTS_FILE);
         XmlDocument doc = new XmlDocument();
 
@@ -128,8 +128,8 @@ namespace Startup_Folder_Installer
             InitializeComponent();
             State = 2;
 
-            GroupBoxes.Add(GroupBox1);
-            GroupBoxes.Add(GroupBox2);
+            groupBoxes.Add(GroupBox1);
+            groupBoxes.Add(GroupBox2);
         }
 
         private void StartButton_Click(object sender, RoutedEventArgs e)
