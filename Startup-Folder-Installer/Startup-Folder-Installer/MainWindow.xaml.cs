@@ -97,7 +97,7 @@ namespace Disc_Drive_Installer
                                 {
                                     if (nodeChild.ChildNodes.Item(i).Name == "name")
                                     {
-                                        newBox.Content = nodeChild.ChildNodes;
+                                        newBox.Content = nodeChild.ChildNodes.Item(i).InnerText;
                                     }
                                 }
 
