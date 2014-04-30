@@ -26,13 +26,13 @@ namespace Startup_Folder_Installer
     /// </summary>
     public partial class MainWindow : Window
     {
-        private const string FILE_TYPE_1 = "Tool";
-        private const string FILE_TYPE_2 = "Prank";
         private const string CONTENTS_FILE = @"Startup_Folder_Installer.Assets.ExampleFiles.Contents.xml";
-        
+
+        private List<CheckBox> checkBoxes = new List<CheckBox>();
         private List<GroupBox> groupBoxes = new List<GroupBox>();
-        Stream testStream = System.Reflection.Assembly.GetExecutingAssembly().GetManifestResourceStream(CONTENTS_FILE);
+        Stream contentsFileStream = System.Reflection.Assembly.GetExecutingAssembly().GetManifestResourceStream(CONTENTS_FILE);
         XmlDocument doc = new XmlDocument();
+        DispatcherTimer Timer = new DispatcherTimer();
 
         private double ProgressPercentage
         {
@@ -51,6 +51,16 @@ namespace Startup_Folder_Installer
             set
             {
                 if (value == 0)
+                {
+                    // Installation choices
+                    StartButton.Visibility = System.Windows.Visibility.Visible;
+                    GroupBox1.Visibility = System.Windows.Visibility.Visible;
+                    GroupBox2.Visibility = System.Windows.Visibility.Visible;
+
+                    TextBlock.Visibility = System.Windows.Visibility.Hidden;
+                    ProgressBar.Visibility = System.Windows.Visibility.Hidden;
+                }
+                else if (value == 2)
                 {
                     // Error
                     TextBlock.Visibility = System.Windows.Visibility.Visible;
@@ -75,32 +85,6 @@ namespace Startup_Folder_Installer
 
                     TextBlock.FontSize = 14;
                 }
-                else if (value == 2)
-                {
-                    // Installation choices
-                    StartButton.Visibility = System.Windows.Visibility.Visible;
-                    GroupBox1.Visibility = System.Windows.Visibility.Visible;
-                    GroupBox2.Visibility = System.Windows.Visibility.Visible;
-                    GroupBox1Grid.Visibility = System.Windows.Visibility.Visible;
-                    GroupBox2Grid.Visibility = System.Windows.Visibility.Visible;
-
-                    TextBlock.Visibility = System.Windows.Visibility.Hidden;
-                    ProgressBar.Visibility = System.Windows.Visibility.Hidden;
-
-                    GroupBox1.Header = FILE_TYPE_1;
-                    GroupBox2.Header = FILE_TYPE_2;
-
-                    doc.Load(testStream);
-                    foreach (GroupBox groupBox in groupBoxes)
-                    {
-                        if (nodeChild.Attributes[0].Value == (string)groupBox.Header)
-                        {
-                            Grid grid = new Grid();
-                            grid = (Grid)groupBox.Content;
-                            grid.Children.Add(newBox);
-                        }
-                    }
-                }
                 else if (value == 3)
                 {
                     // Done
@@ -118,18 +102,25 @@ namespace Startup_Folder_Installer
                 }
             }
         }
-        DispatcherTimer Timer = new DispatcherTimer();
 
         public MainWindow()
         {
+            InitializeComponent();
+
+            // Stupid coding, but whatever
+            groupBoxes.Add(GroupBox1);
+            groupBoxes.Add(GroupBox2);
+
+            // Timers
             Timer.Tick += new EventHandler(Timer_Tick);
             Timer.Interval = new TimeSpan(0, 0, 0, 0, 1);
 
-            InitializeComponent();
-            State = 2;
-
-            groupBoxes.Add(GroupBox1);
-            groupBoxes.Add(GroupBox2);
+            // For the XML
+            doc.Load(contentsFileStream);
+            XMLtoCheckboxes();
+            
+            // Makes the groupboxes and install button visible
+            State = 0;
         }
 
         private void StartButton_Click(object sender, RoutedEventArgs e)
@@ -155,7 +146,7 @@ namespace Startup_Folder_Installer
                 }
                 catch (Exception ex)
                 {
-                    State = 0;
+                    State = 2;
                     TextBlock.Text = ex.ToString();
                 }
                 return;
@@ -176,6 +167,27 @@ namespace Startup_Folder_Installer
                             fileStream.WriteByte((byte)stream.ReadByte());
                         }
                         fileStream.Close();
+                    }
+                }
+            }
+        }
+
+        private void XMLtoCheckboxes()
+        {
+            // Create checkboxes based on CONTENTS_FILE and insert them into the correct GroupBoxes
+            checkBoxes = Helpers.DanXML.XML_to_CheckBox(doc.ChildNodes, "file", "name", "type");
+            foreach (CheckBox box in checkBoxes)
+            {
+                // box.ToolTip should contain the value of XML attribute "type"
+                string tooltip = (string)box.ToolTip;
+
+                foreach (GroupBox groupBox in groupBoxes)
+                {
+                    string header = (string)groupBox.Header;
+                    if (header.ToLower() == tooltip.ToLower())
+                    {
+                        Grid grid = (Grid)groupBox.Content;
+                        grid.Children.Add(box);
                     }
                 }
             }
