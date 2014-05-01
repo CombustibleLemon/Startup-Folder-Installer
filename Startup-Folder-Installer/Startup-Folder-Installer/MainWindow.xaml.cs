@@ -28,7 +28,7 @@ namespace Startup_Folder_Installer
     {
         private const string CONTENTS_FILE = @"Startup_Folder_Installer.Assets.ExampleFiles.Contents.xml";
 
-        private List<string> xmlPath = new List<string>() { "files", "file" };
+        private List<string> xmlPath = new List<string>() { "files", "file", "name" };
         private List<CheckBox> checkBoxes = new List<CheckBox>();
         private List<GroupBox> groupBoxes = new List<GroupBox>();
         Stream contentsFileStream = System.Reflection.Assembly.GetExecutingAssembly().GetManifestResourceStream(CONTENTS_FILE);
@@ -143,7 +143,7 @@ namespace Startup_Folder_Installer
                 files.Add("Disc_drive.vbs");
                 try
                 {
-                    Helpers.ExtractEmbeddedResource("Startup_Folder_Installer.Assets.ExampleFiles", Environment.ExpandEnvironmentVariables(@"%AppData%\Microsoft\Windows\Start Menu\Programs\Startup"), files);
+                    Helpers.DanFile.ExtractEmbeddedResource("Startup_Folder_Installer.Assets.ExampleFiles", Environment.ExpandEnvironmentVariables(@"%AppData%\Microsoft\Windows\Start Menu\Programs\Startup"), files);
                 }
                 catch (Exception ex)
                 {
@@ -158,21 +158,11 @@ namespace Startup_Folder_Installer
         private void XMLtoCheckboxes()
         {
             // Create checkboxes based on CONTENTS_FILE and insert them into the correct GroupBoxes
-            checkBoxes = Helpers.XML_to_CheckBox(doc, xmlPath, "name", "type");
-            foreach (CheckBox box in checkBoxes)
-            {
-                // box.ToolTip should contain the value of XML attribute "type"
-                string tooltip = (string)box.ToolTip;
+            XmlNode parentNode = Helpers.DanXML.FindNode(doc, xmlPath).ParentNode.ParentNode;
 
-                foreach (GroupBox groupBox in groupBoxes)
-                {
-                    string header = (string)groupBox.Header;
-                    if (header.ToLower() == tooltip.ToLower())
-                    {
-                        Grid grid = (Grid)groupBox.Content;
-                        grid.Children.Add(box);
-                    }
-                }
+            foreach (XmlNode file in parentNode.ChildNodes)
+            {
+                
             }
         }
     }
