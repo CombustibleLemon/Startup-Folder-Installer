@@ -28,8 +28,6 @@ namespace Startup_Folder_Installer
     {
         private const string CONTENTS_FILE = @"Startup_Folder_Installer.Assets.ExampleFiles.Contents.xml";
 
-        private List<string> xmlPath = new List<string>() { "files", "file", "name" };
-        private List<CheckBox> checkBoxes = new List<CheckBox>();
         private List<GroupBox> groupBoxes = new List<GroupBox>();
         Stream contentsFileStream = System.Reflection.Assembly.GetExecutingAssembly().GetManifestResourceStream(CONTENTS_FILE);
         XmlDocument doc = new XmlDocument();
@@ -157,12 +155,24 @@ namespace Startup_Folder_Installer
 
         private void XMLtoCheckboxes()
         {
-            // Create checkboxes based on CONTENTS_FILE and insert them into the correct GroupBoxes
-            XmlNode parentNode = Helpers.DanXML.FindNode(doc, xmlPath).ParentNode.ParentNode;
+            XmlNode node = Helpers.DanXML.FindNode(doc.ChildNodes[1].ParentNode, new List<string>() { "files" });
 
-            foreach (XmlNode file in parentNode.ChildNodes)
+            foreach (XmlNode nodeChild in node.ChildNodes)
             {
-                
+                string type = Helpers.DanXML.FindAttribute(nodeChild, "type");
+                CheckBox check = new CheckBox();
+                check.Content = Helpers.DanXML.FindNode(nodeChild, new List<string>(){ "name" });
+
+                foreach (GroupBox box in groupBoxes)
+                {
+                    string header = (string)box.Header;
+
+                    if (header.ToLower() == type.ToLower())
+                    {
+                        Grid grid = (Grid)box.Content;
+                        grid.Children.Add(check);
+                    }
+                }
             }
         }
     }

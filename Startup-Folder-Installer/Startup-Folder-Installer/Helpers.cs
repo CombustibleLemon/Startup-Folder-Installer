@@ -11,17 +11,16 @@ namespace Startup_Folder_Installer
     {
         public static class DanXML
         {
-            public static XmlNode FindNode(XmlDocument document, List<string> entityTree)
+            public static XmlNode FindNode(XmlNode node, List<string> entityTree)
             {
-                List<CheckBox> list = new List<CheckBox>();
-                XmlNodeList nodes = document.ChildNodes;
+                XmlNodeList nodes = node.ChildNodes;
 
                 foreach (string currentEntity in entityTree)
                 {
                     foreach (XmlNode nodeChild in nodes)
                     {
                         // If names are equal AND this is the final item in entityTree
-                        if (currentEntity.ToLower() == nodeChild.Name.ToLower() && entityTree.IndexOf(currentEntity) == entityTree.Count - 1)
+                        if ((currentEntity.ToLower() == nodeChild.Name.ToLower()) && (entityTree.IndexOf(currentEntity) == entityTree.Count - 1))
                         {
                             return nodeChild;
                         }
@@ -29,6 +28,25 @@ namespace Startup_Folder_Installer
                         else if (currentEntity.ToLower() == nodeChild.Name.ToLower())
                         {
                             nodes = nodeChild.ChildNodes;
+                        }
+                    }
+                }
+                return null;
+            }
+
+            public static string FindAttribute(XmlNode node, string attributeName)
+            {
+                if ((node.Attributes != null) && (node.Attributes[attributeName] != null))
+                {
+                    return node.Attributes[attributeName].InnerText;
+                }
+                else if (node.HasChildNodes)
+                {
+                    foreach (XmlNode nodeChild in node.ChildNodes)
+                    {
+                        if (FindAttribute(nodeChild, attributeName) != null)
+                        {
+                            return FindAttribute(nodeChild, attributeName);
                         }
                     }
                 }
