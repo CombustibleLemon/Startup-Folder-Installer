@@ -34,6 +34,27 @@ namespace Startup_Folder_Installer
                 return null;
             }
 
+            public static XmlNode FindInnerText(XmlNode node, string innerText)
+            {
+                if (node.InnerText == innerText)
+                {
+                    return node;
+                }
+                else if (node.HasChildNodes)
+                {
+                    foreach (XmlNode nodeChild in node.ChildNodes)
+                    {
+                        XmlNode iterated = FindInnerText(nodeChild, innerText);
+                        if (iterated != null)
+                        {
+                            return iterated;
+                        }
+                    }
+                }
+
+                return null;
+            }
+
             public static string FindAttribute(XmlNode node, string attributeName)
             {
                 if ((node.Attributes != null) && (node.Attributes[attributeName] != null))

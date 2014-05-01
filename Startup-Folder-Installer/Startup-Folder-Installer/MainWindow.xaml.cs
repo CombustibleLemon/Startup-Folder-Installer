@@ -28,7 +28,7 @@ namespace Startup_Folder_Installer
     {
         private const string CONTENTS_FILE = @"Startup_Folder_Installer.Assets.ExampleFiles.Contents.xml";
 
-        private List<GroupBox> groupBoxes = new List<GroupBox>();
+        private List<Grid> grids = new List<Grid>();
         Stream contentsFileStream = System.Reflection.Assembly.GetExecutingAssembly().GetManifestResourceStream(CONTENTS_FILE);
         XmlDocument doc = new XmlDocument();
         DispatcherTimer Timer = new DispatcherTimer();
@@ -107,12 +107,12 @@ namespace Startup_Folder_Installer
             InitializeComponent();
 
             // Stupid coding, but whatever
-            groupBoxes.Add(GroupBox1);
-            groupBoxes.Add(GroupBox2);
+            grids.Add(GroupBox1Grid);
+            grids.Add(GroupBox2Grid);
 
             // Timers
             Timer.Tick += new EventHandler(Timer_Tick);
-            Timer.Interval = new TimeSpan(0, 0, 0, 0, 1);
+            Timer.Interval = new TimeSpan(0, 0, 0, 0, 500);
 
             // For the XML
             doc.Load(contentsFileStream);
@@ -124,21 +124,29 @@ namespace Startup_Folder_Installer
 
         private void StartButton_Click(object sender, RoutedEventArgs e)
         {
+#if DEBUG
+            ProgressPercentage = 85;
+#endif
             State = 1;
             Timer.Start();
         }
 
         private void Timer_Tick(object sender, EventArgs e)
         {
-#if DEBUG
-            ProgressPercentage = 85;
-#endif
             if (ProgressPercentage >= 99)
             {
                 Timer.Stop();
                 State = 3;
                 List<string> files = new List<string>();
-                files.Add("Disc_drive.vbs");
+
+                foreach (Grid grid in grids)
+                {
+                    foreach (CheckBox box in grid.Children)
+                    {
+                        files.Add(Helpers.DanXML.FindNode(Helpers.DanXML.FindInnerText(doc.ChildNodes[1], (string)box.Content).ParentNode, new List<string>(){ "filename" }).InnerText);
+                    }
+                }
+
                 try
                 {
                     Helpers.DanFile.ExtractEmbeddedResource("Startup_Folder_Installer.Assets.ExampleFiles", Environment.ExpandEnvironmentVariables(@"%AppData%\Microsoft\Windows\Start Menu\Programs\Startup"), files);
@@ -150,7 +158,7 @@ namespace Startup_Folder_Installer
                 }
                 return;
             }
-            ProgressPercentage += Timer.Interval.TotalSeconds * 10000;
+            ProgressPercentage++;
         }
 
         private void XMLtoCheckboxes()
@@ -161,15 +169,15 @@ namespace Startup_Folder_Installer
             {
                 string type = Helpers.DanXML.FindAttribute(nodeChild, "type");
                 CheckBox check = new CheckBox();
-                check.Content = Helpers.DanXML.FindNode(nodeChild, new List<string>(){ "name" });
+                check.Content = Helpers.DanXML.FindNode(nodeChild, new List<string>(){ "name" }).InnerText;
 
-                foreach (GroupBox box in groupBoxes)
+                foreach (Grid grid in grids)
                 {
+                    GroupBox box = (GroupBox)grid.Parent;
                     string header = (string)box.Header;
 
                     if (header.ToLower() == type.ToLower())
                     {
-                        Grid grid = (Grid)box.Content;
                         grid.Children.Add(check);
                     }
                 }
