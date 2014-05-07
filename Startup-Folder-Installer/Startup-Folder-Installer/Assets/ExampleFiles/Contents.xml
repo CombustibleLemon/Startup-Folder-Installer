@@ -5,7 +5,7 @@
     <filename>Disc_drive.vbs</filename>
   </file>
   <file type="tool" format="text/batch">
-    <name>43-minute logoff</name>
+    <name>48-minute restart</name>
     <filename>restart.bat</filename>
   </file>
 </files>
