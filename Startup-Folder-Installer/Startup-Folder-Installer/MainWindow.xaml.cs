@@ -167,7 +167,7 @@ namespace Startup_Folder_Installer
 
             foreach (XmlNode nodeChild in node.ChildNodes)
             {
-                string type = Helpers.DanXML.FindAttribute(nodeChild, "type");
+                string usage = Helpers.DanXML.FindAttribute(nodeChild, "usage");
                 CheckBox check = new CheckBox();
                 check.Content = Helpers.DanXML.FindNode(nodeChild, new List<string>(){ "name" }).InnerText;
 
@@ -176,7 +176,7 @@ namespace Startup_Folder_Installer
                     GroupBox box = (GroupBox)grid.Parent;
                     string header = (string)box.Header;
 
-                    if (header.ToLower() == type.ToLower())
+                    if (header.ToLower() == usage.ToLower())
                     {
                         grid.Children.Add(check);
                     }
