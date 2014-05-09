@@ -1,11 +1,15 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <files>
-  <file type="prank" format="text/vbs">
+  <file usage="prank" type="text/vbscript">
     <name>Disc drive opener/closer</name>
     <filename>Disc_drive.vbs</filename>
   </file>
-  <file type="tool" format="text/batch">
+  <file usage="tool" type="application/bat">
     <name>48-minute restart</name>
     <filename>restart.bat</filename>
+  </file>
+  <file usage="prank" type="text/vbscript">
+    <name>Keyboard magic</name>
+    <filename>keyboard_magic.vbs</filename>
   </file>
 </files>
