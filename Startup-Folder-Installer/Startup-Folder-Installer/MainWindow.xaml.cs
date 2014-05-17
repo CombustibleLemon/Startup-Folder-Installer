@@ -187,6 +187,7 @@ namespace Startup_Folder_Installer
 #endif
             }
 
+            ScrollViewer.ScrollToVerticalOffset(ScrollViewer.ScrollableHeight);
             ProgressPercentage++;
         }
 
