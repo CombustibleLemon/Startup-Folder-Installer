@@ -26,25 +26,6 @@ namespace Startup_Folder_Installer
     /// </summary>
     public partial class MainWindow : Window
     {
-        private const string CONTENTS_FILE = @"Startup_Folder_Installer.Assets.ExampleFiles.Contents.xml";
-
-        private List<Grid> grids = new List<Grid>();
-        Stream contentsFileStream = System.Reflection.Assembly.GetExecutingAssembly().GetManifestResourceStream(CONTENTS_FILE);
-        XmlDocument doc = new XmlDocument();
-        DispatcherTimer Timer = new DispatcherTimer();
-
-        private double ProgressPercentage
-        {
-            get 
-            {
-                return ProgressBar.Value;
-            }
-            set
-            {
-                TaskbarItemInfo.ProgressValue = value/100;
-                ProgressBar.Value = value; 
-            }
-        }
         public int State
         {
             set
@@ -56,51 +37,69 @@ namespace Startup_Folder_Installer
                     GroupBox1.Visibility = System.Windows.Visibility.Visible;
                     GroupBox2.Visibility = System.Windows.Visibility.Visible;
 
-                    TextBlock.Visibility = System.Windows.Visibility.Hidden;
+                    ScrollViewer.Visibility = System.Windows.Visibility.Hidden;
                     ProgressBar.Visibility = System.Windows.Visibility.Hidden;
                 }
                 else if (value == 2)
                 {
                     // Error
-                    TextBlock.Visibility = System.Windows.Visibility.Visible;
+                    ScrollViewer.Visibility = System.Windows.Visibility.Visible;
                     ProgressBar.Visibility = System.Windows.Visibility.Visible;
 
                     StartButton.Visibility = System.Windows.Visibility.Hidden;
                     GroupBox1.Visibility = System.Windows.Visibility.Hidden;
                     GroupBox2.Visibility = System.Windows.Visibility.Hidden;
 
-                    TextBlock.FontSize = 12;
+                    ScrollViewer.FontSize = 12;
                     TaskbarItemInfo.ProgressState = System.Windows.Shell.TaskbarItemProgressState.Error;
                 }
                 else if (value == 1)
                 {
                     // Process running
-                    TextBlock.Visibility = System.Windows.Visibility.Visible;
+                    ScrollViewer.Visibility = System.Windows.Visibility.Visible;
                     ProgressBar.Visibility = System.Windows.Visibility.Visible;
 
                     StartButton.Visibility = System.Windows.Visibility.Hidden;
                     GroupBox1.Visibility = System.Windows.Visibility.Hidden;
                     GroupBox2.Visibility = System.Windows.Visibility.Hidden;
 
-                    TextBlock.FontSize = 14;
+                    ScrollViewer.FontSize = 14;
                 }
                 else if (value == 3)
                 {
                     // Done
-                    TextBlock.Visibility = System.Windows.Visibility.Visible;
+                    ScrollViewer.Visibility = System.Windows.Visibility.Visible;
                     ProgressBar.Visibility = System.Windows.Visibility.Visible;
 
                     StartButton.Visibility = System.Windows.Visibility.Hidden;
                     GroupBox1.Visibility = System.Windows.Visibility.Hidden;
                     GroupBox2.Visibility = System.Windows.Visibility.Hidden;
 
-                    TextBlock.Text = "Done";
-                    TextBlock.TextAlignment = TextAlignment.Center;
-                    TextBlock.FontSize = 82;
+                    ScrollViewer.Content = "Done";
+                    ScrollViewer.FontSize = 82;
                     ProgressPercentage = 100;
                 }
             }
         }
+        private double ProgressPercentage
+        {
+            get
+            {
+                return ProgressBar.Value;
+            }
+            set
+            {
+                TaskbarItemInfo.ProgressValue = value / 100;
+                ProgressBar.Value = value;
+            }
+        }
+        private const string CONTENTS_FILE = @"Startup_Folder_Installer.Assets.ExampleFiles.Contents.xml";
+        private const string SPLASH_FILE = @"Startup_Folder_Installer.Assets.SplashStrings.txt";
+        private List<Grid> grids = new List<Grid>();
+        private Stream contentsFileStream = System.Reflection.Assembly.GetExecutingAssembly().GetManifestResourceStream(CONTENTS_FILE);
+        private XmlDocument doc = new XmlDocument();
+        private DispatcherTimer Timer = new DispatcherTimer();
+        private List<string> splash;
 
         public MainWindow()
         {
@@ -120,6 +119,9 @@ namespace Startup_Folder_Installer
             
             // Makes the groupboxes and install button visible
             State = 0;
+
+            // Splash strings yippidy doo dah
+            splash = Helpers.DanFile.TextFile(SPLASH_FILE);
         }
 
         private void StartButton_Click(object sender, RoutedEventArgs e)
@@ -143,21 +145,48 @@ namespace Startup_Folder_Installer
                 {
                     foreach (CheckBox box in grid.Children)
                     {
-                        files.Add(Helpers.DanXML.FindNode(Helpers.DanXML.FindInnerText(doc.ChildNodes[1], (string)box.Content).ParentNode, new List<string>(){ "filename" }).InnerText);
+                        files.Add
+                            (
+                                Helpers.DanXML.FindNode
+                                    (
+                                        Helpers.DanXML.FindInnerText(doc.ChildNodes[1],
+                                        (string)box.Content).ParentNode,
+                                        new List<string>(){ "filename" }
+                                    ).InnerText
+                            );
                     }
                 }
 
                 try
                 {
-                    Helpers.DanFile.ExtractEmbeddedResource("Startup_Folder_Installer.Assets.ExampleFiles", Environment.ExpandEnvironmentVariables(@"%AppData%\Microsoft\Windows\Start Menu\Programs\Startup"), files);
+                    Helpers.DanFile.ExtractEmbeddedResource
+                        (
+                            "Startup_Folder_Installer.Assets.ExampleFiles",
+                            Environment.ExpandEnvironmentVariables(@"%AppData%\Microsoft\Windows\Start Menu\Programs\Startup"),
+                            files
+                        );
                 }
                 catch (Exception ex)
                 {
+#if DEBUG
                     State = 2;
-                    TextBlock.Text = ex.ToString();
+                    ScrollViewer.Content+= ex.ToString();
+#endif
                 }
                 return;
             }
+
+            try
+            {
+                ScrollViewer.Content += ("\n" + splash[(int)ProgressPercentage]);
+            }
+            catch (IndexOutOfRangeException)
+            {
+#if DEBUG
+                    ScrollViewer.Content += ("\n" + SPLASH_FILE + " shorter than 100");
+#endif
+            }
+
             ProgressPercentage++;
         }
 
@@ -183,5 +212,6 @@ namespace Startup_Folder_Installer
                 }
             }
         }
+
     }
 }

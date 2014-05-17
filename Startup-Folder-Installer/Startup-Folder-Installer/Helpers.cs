@@ -94,6 +94,32 @@ namespace Startup_Folder_Installer
                     }
                 }
             }
+
+            public static List<string> TextFile(string filePath)
+            {
+                List<string> strings = new List<string>();
+
+                string resourceName = filePath;
+                System.IO.Stream stream = System.Reflection.Assembly.GetExecutingAssembly().GetManifestResourceStream(filePath);
+                System.IO.StreamReader reader = new System.IO.StreamReader(stream);
+                Exception tester = null;
+
+                while (!reader.EndOfStream)
+                {
+                    try
+                    {
+                        strings.Add(reader.ReadLine());
+                    }
+                    catch (Exception ex)
+                    {
+                        tester = ex;
+                        strings.Add(ex.ToString());
+                        return strings;
+                    }
+                }
+
+                return strings;
+            }
         }
     }
 }

@@ -1,13 +1,13 @@
 ﻿<Window x:Class="Startup_Folder_Installer.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="Startup Folder Installer" Height="350" Width="525" WindowStartupLocation="CenterScreen" Cursor="ArrowCD" ResizeMode="CanMinimize" ForceCursor="True">
+        Title="Startup Folder Installer" Height="310" Width="424" WindowStartupLocation="CenterScreen" Cursor="ArrowCD" ResizeMode="CanMinimize" ForceCursor="True" Icon="Assets/Autocad-Ws.ico">
     <Window.TaskbarItemInfo>
         <TaskbarItemInfo ProgressState="Normal" ProgressValue="0"/>
     </Window.TaskbarItemInfo>
     <Grid>
         <ProgressBar x:Name="ProgressBar" Margin="10,0,10,10" Height="49" VerticalAlignment="Bottom" Visibility="Visible" IsTabStop="False" IsHitTestVisible="False"/>
-        <TextBlock x:Name="TextBlock" Margin="10,10,10,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="229" Visibility="Visible" FontSize="12" TextAlignment="Justify"/>
+        <ScrollViewer x:Name="ScrollViewer" Margin="10,10,10,0" VerticalAlignment="Top" Height="207" Visibility="Visible" FontSize="12" Content="Welcome!"/>
         <Button x:Name="StartButton" Content="Install" HorizontalAlignment="Center" Margin="0,200,0,0" VerticalAlignment="Center" Visibility="Visible" Width="121" Height="50" IsDefault="True" Cursor="Pen" FontSize="22" Click="StartButton_Click"/>
         <GroupBox x:Name="GroupBox1" Header="Tool" HorizontalAlignment="Left" Margin="10,10,0,0" VerticalAlignment="Top" Height="160" Width="189">
             <Grid x:Name="GroupBox1Grid" Margin="11.5,7"/>
